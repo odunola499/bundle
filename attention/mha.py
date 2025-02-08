@@ -54,8 +54,8 @@ class MultiHeadAttention(nn.Module):
 
 
         else:
-            k = self.linear_k(keys)
-            v = self.linear_v(values)
+            k = self.linear_k(keys) #the slow thing, matrix grows quadraticly
+            v = self.linear_v(values) #the slow thing, matrix grows quadraticly
 
             k = k.view(batch_size, k_seq_len, self.num_heads, self.dim_k).permute(0, 2, 1, 3)
             v = v.view(batch_size, v_seq_len, self.num_heads, self.dim_v).permute(0, 2, 1, 3)

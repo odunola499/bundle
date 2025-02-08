@@ -11,6 +11,7 @@ class MultiLatentAttention(nn.Module):
         self.dim_k = config.dim_k
         self.dim_v = config.dim_v
         self.latent_dim = config.latent_dim
+        self.is_causal = causal
 
         self.linear_q = nn.Linear(config.dim_model, config.dim_k * config.num_heads)
         #can we compress the queries too?
@@ -48,7 +49,7 @@ class MultiLatentAttention(nn.Module):
                 new_v = new_latent_v.view(batch_size, k_seq_len, self.num_heads, self.latent_dim)
                 #TODO: A user could choose to lose track of reconstructed kv to safe memory
                 new_k = self.k_reconstruction(new_k).permute(0,2,1,3)
-                new_v = self.k_reconstruction(new_v).permute(0,2,1,3)
+                new_v = self.v_reconstruction(new_v).permute(0,2,1,3)
 
                 kv_cache["k"] = torch.cat((cached_k, new_k), dim=2)
                 kv_cache["v"] = torch.cat((cached_v, new_v), dim=2)
@@ -66,7 +67,10 @@ class MultiLatentAttention(nn.Module):
                 latent_k = latent_k.permute(0,2,1,3)
                 latent_v = latent_v.permute(0,2,1,3)
 
-                kv_cache = {"k": keys, "v": values, "latent_k": latent_k, "latent_v": latent_v}
+                processed_k = self.k_reconstruction(latent_k)
+                processed_v = self.v_reconstruction(latent_v)
+
+                kv_cache = {"k": processed_k, "v": processed_v, "latent_k": latent_k, "latent_v": latent_v}
 
             k, v = kv_cache['k'], kv_cache['v']
 
@@ -91,7 +95,7 @@ class MultiLatentAttention(nn.Module):
             q_k.masked_fill_(causal_mask, -float('inf'))
 
         attn_weights = torch.softmax(q_k, dim = -1)
-        attn_values = torch.einsum("bnqk, bnvd -> bnqd", attn_weights, v)
+        attn_values = torch.einsum("bnqk, bnvd -> bnvd", attn_weights, v)
         attn_values = (attn_values.permute(0,2,1,3).contiguous().view(batch_size, v_seq_len, self.dim_v * self.num_heads))
         y = self.linear_out(attn_values)
         return  y, kv_cache

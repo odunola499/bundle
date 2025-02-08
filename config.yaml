@@ -4,12 +4,14 @@ model:
 
   positional_encoding:
     name: "absolute" #can be one of "absolute, "relative" or "rotational"
+    dim_model: ${model.encoder.constants.dropout}
+    max_seq_length: 512
 
   encoder:
     constants:
       vocab_size: 10000
       dim_model: 512
-      max_seq_length: 512
+      max_seq_length: ${model.positional_encoding.max_seq_length}
       dropout: 0.1
 
     attention:
