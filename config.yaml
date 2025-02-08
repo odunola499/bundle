@@ -1,0 +1,37 @@
+model:
+  name: "Decoder" #can be one of "Encoder", "Decoder" or "Encoder-Decoder"
+
+
+  rope:
+    arg1: null
+
+  encoder:
+    constants:
+      vocab_size: 10000
+      dim_model: 512
+      max_seq_length: 512
+      dropout: 0.1
+
+    attention:
+      name: "MHA" #can be one of MQA, MLA, MHA, GQA
+      num_heads: 8
+      dim_model: ${model.encoder.constants.dim_model}
+      dim_k: 32
+      dim_v: 32
+      dropout: ${model.encoder.constants.dropout}
+      num_query_heads: 4  #this is only functional for GQA, value has to be less than num_hheads
+
+    ff:
+      name: "FeedForward"
+
+  decoder:
+    attention:
+      name: "MHA" #can be one of MQA, MLA, MHA
+      num_heads: 8
+      dim_model: 512
+      dim_k: 32
+      dim_v: 32
+      dropout: 0.1
+    ff:
+      name: "FeedForward"
+
