@@ -2,8 +2,8 @@ model:
   name: "Decoder" #can be one of "Encoder", "Decoder" or "Encoder-Decoder"
 
 
-  rope:
-    arg1: null
+  positional_encoding:
+    name: "absolute" #can be one of "absolute, "relative" or "rotational"
 
   encoder:
     constants:
@@ -13,14 +13,14 @@ model:
       dropout: 0.1
 
     attention:
-      name: "MHA" #can be one of MQA, MLA, MHA, GQA
+      name: "MHA" #can be one of MQA, MLA, MHA, GQA, SWA
       num_heads: 8
       dim_model: ${model.encoder.constants.dim_model}
       dim_k: 32
       dim_v: 32
       dropout: ${model.encoder.constants.dropout}
       num_query_heads: 4  #this is only functional for GQA, value has to be less than num_hheads
-
+      latent_dim: 64 #only useful for MLA
     ff:
       name: "FeedForward"
 
