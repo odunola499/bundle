@@ -2,15 +2,17 @@ import torch
 from torch import nn
 from torch import Tensor
 from typing import Optional, Dict
+from encoding import rotary_positional_encoding
 
 class MultiQueryAttention(nn.Module):
-    def __init__(self, config, causal = True):
+    def __init__(self, config, causal = True, rope = True):
         super().__init__()
         self.num_heads = config.num_heads
         self.dim_model = config.dim_model
         self.dim_k = config.dim_k
         self.dim_v = config.dim_v
         self.is_causal = causal
+        self.rope = rope
 
         self.linear_q = nn.Linear(config.dim_model, config.dim_k * config.num_heads)
         self.linear_k = nn.Linear(config.dim_model, config.dim_k) #same head for everything
@@ -57,6 +59,10 @@ class MultiQueryAttention(nn.Module):
 
             k = k.view(batch_size, k_seq_len, self.num_heads, self.dim_k).permute(0,2,1,3)
             v = v.view(batch_size, k_seq_len, self.num_heads, self.dim_v).permute(0,2,1,3)
+
+        if self.rope:
+            k = rotary_positional_encoding(k)
+            q = rotary_positional_encoding(q)
 
         q_k = torch.einsum('bnqd,bnkd -> bnqk', q, k) / (self.dim_k ** 0.5)
         if mask is not None:

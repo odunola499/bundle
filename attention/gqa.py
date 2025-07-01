@@ -2,9 +2,10 @@ import torch
 from torch import nn
 from torch import Tensor
 from typing import Optional, Dict
+from encoding import rotary_positional_encoding
 
 class GroupedQueryAttention(nn.Module):
-    def __init__(self, config, causal = True):
+    def __init__(self, config, causal = True, rope = True):
         super().__init__()
         self.num_heads = config.num_heads
         self.dim_model = config.dim_model
@@ -14,6 +15,7 @@ class GroupedQueryAttention(nn.Module):
         self.is_causal = causal  # used to decide if a model is causal
         assert self.num_heads // self.num_query_heads == 0, "num_heads should be divisible by num_query_heads"
 
+        self.rope = rope
         self.linear_q = nn.Linear(config.dim_model, config.dim_k * config.num_query_heads)
         self.linear_k = nn.Linear(config.dim_model, config.dim_k * config.num_heads)
         self.linear_v = nn.Linear(config.dim_model, config.dim_v * config.num_heads)
@@ -65,6 +67,9 @@ class GroupedQueryAttention(nn.Module):
         k = k.repeat_interleave(num_heads_per_kv, dim=1) #we make getting attn matrics possible
         v = v.repeat_interleave(num_heads_per_kv, dim=1)
 
+        if self.rope:
+            k = rotary_positional_encoding(k)
+            q = rotary_positional_encoding(q)
 
         q_k = torch.einsum('bnqd,bnkd -> bnqk', q, k) / (self.dim_k ** 0.5)
         if mask is not None:

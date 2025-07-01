@@ -13,5 +13,5 @@ class AbsolutePositionalEncoding(nn.Module):
         output = x + self.pe(x)
         return output
 
-    def apply_pos(self, x:Tensor):
+    def apply_pos(self, x:Tensor): #function must be available
         return self.forward(x)

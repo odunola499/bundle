@@ -11,3 +11,4 @@ class SlidingWindowAttention(nn.Module):
         self.dim_k = config.dim_k
         self.dim_v = config.dim_v
         self.window_size = config.window_size
+

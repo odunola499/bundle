@@ -24,6 +24,7 @@ model:
       num_query_heads: 4  #this is only functional for GQA, value has to be less than num_hheads
       latent_dim: 64 #only useful for MLA
       window_size: 32 # this is only functional for SWA,
+      rope_dim: 16 # should be less than dim_k
     ff:
       name: "FeedForward"
 
