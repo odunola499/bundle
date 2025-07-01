@@ -1,41 +1,44 @@
+# Model Configuration
 model:
-  name: "Decoder" #can be one of "Encoder", "Decoder" or "Encoder-Decoder"
+  name: "Transformer"
+  model_type: "encoder-decoder"  # Can be "encoder-decoder", "encoder", or "decoder"
+  vocab_size: 10000
+  dim_model: 512
 
-
+  # Positional Encoding
   positional_encoding:
-    name: "absolute" #can be one of "absolute, "relative" or "rotational"
-    dim_model: ${model.encoder.constants.dropout}
-    max_seq_length: 512
+    name: "absolute"  # "absolute" or "rope"
+    max_seq_len: 512
+    rope_theta: 10000.0
 
+  # Encoder Configuration (only used if model_type is "encoder" or "encoder-decoder")
   encoder:
-    constants:
-      vocab_size: 10000
-      dim_model: 512
-      max_seq_length: ${model.positional_encoding.max_seq_length}
-      dropout: 0.1
-
+    num_layers: 6
     attention:
-      name: "MHA" #can be one of MQA, MLA, MHA, GQA, SWA
+      name: "MHA"  # MHA, MQA, MLA, EfficientMLA
       num_heads: 8
-      dim_model: ${model.encoder.constants.dim_model}
-      dim_k: 32
-      dim_v: 32
-      dropout: ${model.encoder.constants.dropout}
-      num_query_heads: 4  #this is only functional for GQA, value has to be less than num_hheads
-      latent_dim: 64 #only useful for MLA
-      window_size: 32 # this is only functional for SWA,
-      rope_dim: 16 # should be less than dim_k
+      dim_k: 64
+      dim_v: 64
+      is_causal: False
+      latent_dim: 128  # For MLA
+      low_dim: 64  # For EfficientMLA
     ff:
-      name: "FeedForward"
+      name: "StandardFeedForward"
+      dim_ff: 2048
+    dropout: 0.1
 
+  # Decoder Configuration (only used if model_type is "decoder" or "encoder-decoder")
   decoder:
+    num_layers: 6
     attention:
-      name: "MHA" #can be one of MQA, MLA, MHA
+      name: "MHA"  # MHA, MQA, MLA, EfficientMLA
       num_heads: 8
-      dim_model: 512
-      dim_k: 32
-      dim_v: 32
-      dropout: 0.1
+      dim_k: 64
+      dim_v: 64
+      is_causal: True
+      latent_dim: 128  # For MLA
+      low_dim: 64  # For EfficientMLA
     ff:
-      name: "FeedForward"
-
+      name: "StandardFeedForward"
+      dim_ff: 2048
+    dropout: 0.1
