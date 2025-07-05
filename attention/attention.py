@@ -5,11 +5,11 @@ from typing import Optional, Dict
 class Attention(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.num_heads = config.num_heads
-        self.dim_model = config.dim_model
-        self.dim_k = config.dim_k
-        self.dim_v = config.dim_v
-        self.is_causal = config.is_causal
+        self.num_heads:int = config.num_heads
+        self.dim_model:int = config.dim_model
+        self.dim_k:int = config.dim_k
+        self.dim_v:int = config.dim_v
+        self.is_causal:bool = config.is_causal
 
 class MHA(Attention):
     def __init__(self, config):
