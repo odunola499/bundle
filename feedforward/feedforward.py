@@ -1,7 +1,8 @@
 from torch import nn
+from feedforward import FeedForwardConfig
 
 class FeedForward(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config:FeedForwardConfig):
         super().__init__()
         self.dim_model = config.dim_model
         self.dim_ff = config.dim_ff

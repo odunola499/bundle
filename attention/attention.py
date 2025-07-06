@@ -1,10 +1,11 @@
 import torch
 from torch import nn, Tensor
 from typing import Optional, Dict
+from attention import AttentionConfig
 
 
 class Attention(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config:AttentionConfig):
         super().__init__()
         self.num_heads: int = config.num_heads
         self.dim_model: int = config.dim_model

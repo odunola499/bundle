@@ -22,6 +22,7 @@ model:
       is_causal: False
       latent_dim: 128  # For MLA
       low_dim: 64  # For EfficientMLA
+      num_group_heads: 8 #for GQA
     ff:
       name: "StandardFeedForward"
       dim_ff: 2048

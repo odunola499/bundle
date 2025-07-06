@@ -3,6 +3,21 @@ from .attention import Attention, MultiHeadAttention, MultiQueryAttention, Multi
 from torch import nn
 from torch import Tensor
 from typing import Optional, Dict
+from dataclasses import dataclass
+
+@dataclass
+class AttentionConfig:
+    dim_ff: int
+    dim_k: int
+    dim_v: int
+    num_heads: int
+    dim_model:int
+    latent_dim:int
+    is_causal:bool
+    num_group_heads:int
+
+    dropout: float = 0.1
+
 
 class DecoderAttention(nn.Module):
     def __init__(self, config):
@@ -32,11 +47,11 @@ class EncoderAttention(nn.Module):
             raise ValueError(f"Invalid attention type: {name}")
         attention = None
         if name == 'MHA':
-            attention = MultiHeadAttention(config, causal = False)
+            attention = MultiHeadAttention(config)
         elif name == 'MQA':
-            attention = MultiQueryAttention(config, causal = False)
+            attention = MultiQueryAttention(config)
         elif name == 'GQA':
-            attention = GroupedQueryAttention(config, causal = False)
+            attention = GroupedQueryAttention(config)
         self.attention = attention
 
     def forward(self, x:Tensor, mask:Tensor = None):
