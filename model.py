@@ -72,3 +72,5 @@ class Transformer(nn.Module):
                 dec_output, _ = layer(dec_output, None, tgt_mask, memory_mask)
             
             return self.fc_out(dec_output)
+        else:
+            raise AttributeError('Unknown model type: {}'.format(self.config.model_type))

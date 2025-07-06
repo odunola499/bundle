@@ -1,6 +1,5 @@
-from mha import MultiHeadAttention
-from mqa import MultiQueryAttention
-from gqa import GroupedQueryAttention
+
+from .attention import Attention, MultiHeadAttention, MultiQueryAttention, MultiLatentAttention, GroupedQueryAttention
 from torch import nn
 from torch import Tensor
 from typing import Optional, Dict
@@ -13,11 +12,11 @@ class DecoderAttention(nn.Module):
             raise ValueError(f"Invalid attention type: {name}")
         attention = None
         if name == 'MHA':
-            attention = MultiHeadAttention(config, causal = True)
+            attention = MultiHeadAttention(config)
         elif name == 'MQA':
-            attention = MultiQueryAttention(config, causal = True)
+            attention = MultiQueryAttention(config)
         elif name == 'GQA':
-            attention = GroupedQueryAttention(config, causal = True)
+            attention = GroupedQueryAttention(config)
         self.attention = attention
 
     def forward(self, x:Tensor,
