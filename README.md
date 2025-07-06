@@ -69,3 +69,28 @@ Bundle is a modular and extensible PyTorch-based framework for building and expe
 2.  Create a new class that inherits from `FeedForward`.
 3.  Implement your feed-forward logic in the `forward` method.
 4.  In `blocks.py`, add your new feed-forward class to the `_get_ff_layer` method in `EncoderBlock` and `DecoderBlock`.
+
+### 4. Norm
+1. Open `norm/norm.py`
+2. Create a new class that inherits from `Normalisation`
+3. Implement the normalisation logic in the 'forward' method.
+4. In the `__init__.py`, add your new normalisation class
+
+### 5. Activation
+1. Open `activation/activation.py`
+2. Follow the same steps as `Norm`
+
+
+## TODO
+- Add popular norm algorithms as abstractions
+  - [ ] BatchNorm
+  - [ ] LayerNorm
+  - [ ] RMSNorm
+  - [ ] GroupNorm
+
+- Add popular activation algorithms as abstractions
+  - [ ] Relu
+  - [ ] Swish
+- Add MOE to feed-forward logic as reference for MOE blog
+
+

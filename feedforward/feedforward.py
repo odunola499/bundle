@@ -1,5 +1,5 @@
 from torch import nn
-from feedforward import FeedForwardConfig
+from .config import FeedForwardConfig
 
 class FeedForward(nn.Module):
     def __init__(self, config:FeedForwardConfig):

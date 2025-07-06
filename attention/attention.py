@@ -1,7 +1,7 @@
 import torch
 from torch import nn, Tensor
 from typing import Optional, Dict
-from attention import AttentionConfig
+from .config import AttentionConfig
 
 
 class Attention(nn.Module):
