@@ -39,7 +39,7 @@ Bundle is a modular and extensible PyTorch-based workbench for building and expe
    
    model = Transformer(config.model)
 
-   # Example usage for an encoder-decoder model
+   # An encoder-decoder model
    if config.model.model_type == "encoder-decoder":
        src = torch.randint(0, config.model.vocab_size, (1, 10))
        tgt = torch.randint(0, config.model.vocab_size, (1, 20))
