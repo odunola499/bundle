@@ -1,6 +1,6 @@
-# Bundle: Your Go-To for LLM Architectures
+# Bundle: Your Go-To for LLM Workbench
 
-Bundle is a modular and extensible PyTorch-based framework for building and experimenting with transformer-style neural networks. It's designed to be easy to use and modify, allowing you to quickly prototype and test new ideas.
+Bundle is a modular and extensible PyTorch-based workbench for building and experimenting with transformer-style neural networks and their building blocks. It's designed to be easy to use and modify, allowing you to quickly prototype and test new ideas.
 
 ## Core Features
 
