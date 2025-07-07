@@ -1,4 +1,4 @@
-# Bundle: Your Go-To for LLM Workbench
+# Bundle: An LLM Workbench
 
 Bundle is a modular and extensible PyTorch-based workbench for building and experimenting with transformer-style neural networks and their building blocks. It's designed to be easy to use and modify, allowing you to quickly prototype and test new ideas.
 
